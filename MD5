@@ -1,11 +1,11 @@
-eac15bf62d90a4d41660e19a90ed2d68 *DESCRIPTION
+990326368b0e63acbb075dcdfb4c8f60 *DESCRIPTION
 b0a055bb45fdcb6746941ad2f3808a47 *LICENSE
-a166012e453f11d57673e79cfe69a9ec *NAMESPACE
-0cfbc881b7e6a0fa1ac4cac989b9e924 *NEWS.md
-8bea3337916d3331e7e3e55463b14ac3 *R/client.R
-e3fff41ce1c5111d08df7a152e73192c *build/vignette.rds
+59d58648fad4d3fa18dfb0a01dac9cba *NAMESPACE
+c7a1be191d79d4fb28f9384930cc47d2 *NEWS.md
+4cc7a6606a52eb38317265b85cf8567b *R/client.R
+64978f5404ec8c9d333ad5ec9fb4442c *build/vignette.rds
 3c4d1df0c886faf952b321dea6d135e1 *inst/doc/filtering.R
 5e1cb5bd48b4d581d32012b7f9dacdb0 *inst/doc/filtering.Rmd
-a6f4bebd2dd8ded71bc527d0ec1dd6d8 *inst/doc/filtering.html
+f454953bf3a3352ebe58eb07e22181be *inst/doc/filtering.html
 351ab7548b5704c3d2e1dc6b5718d9e9 *man/Client.Rd
 5e1cb5bd48b4d581d32012b7f9dacdb0 *vignettes/filtering.Rmd

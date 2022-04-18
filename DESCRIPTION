@@ -1,6 +1,6 @@
 Package: hakaiApi
 Title: Authenticated HTTP Request Client for the 'Hakai' API
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
     person("Taylor", "Denouden", , "taylor.denouden@hakai.org", role = c("aut", "cre")),
     person("Brett", "Johnson", , "brett.johnson@hakai.org", role = "aut"),
@@ -22,11 +22,11 @@ Encoding: UTF-8
 Language: en-CA
 RoxygenNote: 7.1.2
 NeedsCompilation: no
-Packaged: 2022-03-18 00:18:59 UTC; taylor
+Packaged: 2022-04-18 20:59:42 UTC; taylor
 Author: Taylor Denouden [aut, cre],
   Brett Johnson [aut],
   Nate Rosenstock [ctb],
   Chris Davis [ctb]
 Maintainer: Taylor Denouden <taylor.denouden@hakai.org>
 Repository: CRAN
-Date/Publication: 2022-03-18 00:30:02 UTC
+Date/Publication: 2022-04-18 22:04:29 UTC

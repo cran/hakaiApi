@@ -1,8 +1,8 @@
-990326368b0e63acbb075dcdfb4c8f60 *DESCRIPTION
+7a9767bb062df193b05d3f199184c6f5 *DESCRIPTION
 b0a055bb45fdcb6746941ad2f3808a47 *LICENSE
 59d58648fad4d3fa18dfb0a01dac9cba *NAMESPACE
-c7a1be191d79d4fb28f9384930cc47d2 *NEWS.md
-4cc7a6606a52eb38317265b85cf8567b *R/client.R
+09f7cc99225bceb13cae38a1ed46173e *NEWS.md
+ebcca6bba6fb117783ae40c249e3799f *R/client.R
 64978f5404ec8c9d333ad5ec9fb4442c *build/vignette.rds
 3c4d1df0c886faf952b321dea6d135e1 *inst/doc/filtering.R
 5e1cb5bd48b4d581d32012b7f9dacdb0 *inst/doc/filtering.Rmd

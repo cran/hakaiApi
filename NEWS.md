@@ -1,3 +1,19 @@
+# hakaiApi 1.0.3
+
+Bug fixes
+* `get` method now returns tibbles for list responses
+* bump minimum R version to 4.2 to handle using native pipe
+* change maintainer
+
+
+Enhancements
+
+* wrap examples in `try()`
+* now setting the user agent for the client
+* extract `base_request` and `json2tbl` into separate functions to add some unit tests
+* user agent can now be customized via the `HAKAI_API_USER_AGENT` environment variable
+
+
 # hakaiApi 1.0.2
 
 Bug fixes

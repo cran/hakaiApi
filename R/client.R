@@ -3,21 +3,32 @@
 #' @description
 #' Class to use to make authenticated API requests for Hakai data
 #' @importFrom R6 R6Class
-#' @importFrom httr GET add_headers content
+#' @importFrom httr2 request req_headers req_method req_body_json req_perform 
 #' @importFrom readr type_convert
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr bind_rows
 #' @export
 #' @examples
+#' \dontrun{
 #' # Initialize a new client
-#' client <- Client$new()
+#' try(
+#'   client <- Client$new()
+#' )
+#' 
 #' # Follow authorization prompts to log in
 #'
 #' # Retrieve some data. See <https://hakaiinstitute.github.io/hakai-api/> for options.
-#' url <- paste0(client$api_root, "/aco/views/projects?project_year=2020&fields=project_name")
-#' projects_2020 <- client$get(url)
+#' try(
+#'   url <- paste0(client$api_root, "/aco/views/projects?project_year=2020&fields=project_name")
+#' )
 #'
-#' print(projects_2020)
+#' try(
+#'   projects_2020 <- client$get(url)
+#' )
+#'
+#' try(
+#'   print(projects_2020)
+#' )
 #' # # A tibble: 20 x 1
 #' #    project_name
 #' #    <chr>
@@ -26,6 +37,7 @@
 #' #  3 Fraser River - Chimney Creek West William Canyon
 #' #  4 Cruickshank WS
 #' #  ...
+#' }
 Client <- R6::R6Class("Client",  # nolint
   lock_objects = FALSE,
   public = list(
@@ -39,7 +51,9 @@ Client <- R6::R6Class("Client",  # nolint
     #' Defaults to "https://hecate.hakai.org/api-client-login"
     #' @return A client instance
     #' @examples
-    #' client <- Client$new()
+    #' try(
+    #'    client <- Client$new()
+    #' )
     initialize = function(api_root = "https://hecate.hakai.org/api",
                           login_page="https://hecate.hakai.org/api-client-login") {
       self$api_root <- api_root
@@ -58,22 +72,76 @@ Client <- R6::R6Class("Client",  # nolint
     #'@description
     #' Send a GET request to the API
     #' @param endpoint_url The full API url to fetch data from
+    #' @param col_types a readr type specification  
     #' @return A dataframe of the requested data
     #' @examples
-    #' client$get("https://hecate.hakai.org/api/aco/views/projects")
-    get = function(endpoint_url) {
+    #' try(client$get("https://hecate.hakai.org/api/aco/views/projects"))
+    get = function(endpoint_url, col_types = NULL) {
       token <- paste(private$credentials$token_type,
                      private$credentials$access_token)
-      r <- httr::GET(endpoint_url, httr::add_headers(Authorization = token))
-      data <- private$json2tbl(httr::content(r))
+      r <- base_request(endpoint_url, token) |> 
+        httr2::req_perform()
+      data <- httr2::resp_body_json(r)
+      data <- private$json2tbl(httr2::resp_body_json(r))
       data <- tibble::as_tibble(data)
-      data <- readr::type_convert(data)
+      data <- readr::type_convert(data, col_types = col_types)
       return(data)
     },
+
+    #'@description
+    #' Send a POST request to the API
+    #' @param endpoint_url The full API url to fetch data from
+    #' @param rec_data dataframe, list, or other R data structure to send as part of the post request payload
+    #' @return post request response status code and description
+    post = function(endpoint_url, rec_data) {
+      token <- paste(private$credentials$token_type,
+                     private$credentials$access_token)
+      resp <- base_request(endpoint_url, token) |>
+        httr2::req_method("POST") |>
+        httr2::req_body_json(rec_data) |>
+        httr2::req_perform()
+      data <- paste0(httr2::resp_status(resp), ' ',  httr2::resp_status_desc(resp))
+      return(data)
+    },
+
+    #'@description
+    #' Send a PUT request to the API
+    #' @param endpoint_url The full API url to fetch data from
+    #' @param rec_data dataframe, list, or other R data structure to send as part of the post request payload
+    #' @return PUT request response status code and description
+    put = function(endpoint_url, rec_data) {
+      token <- paste(private$credentials$token_type,
+                     private$credentials$access_token)
+      resp <- base_request(endpoint_url, token) |>
+        httr2::req_body_json(data = rec_data, auto_unbox = TRUE) |>
+        httr2::req_method("PUT") |>
+        httr2::req_perform()
+      data <- paste0(httr2::resp_status(resp), ' ',  httr2::resp_status_desc(resp))
+      return(resp)
+    },
+
+    #'@description
+    #' Send a PATCH request to the API
+    #' @param endpoint_url The full API url to fetch data from
+    #' @param rec_data dataframe, list, or other R data structure to send as part of the post request payload
+    #' @return PATCH request response status code and description
+    patch = function(endpoint_url, rec_data) {
+      token <- paste(private$credentials$token_type,
+                     private$credentials$access_token)
+      resp <- base_request(endpoint_url, token) |>
+        httr2::req_body_json(data = rec_data, auto_unbox = TRUE) |>
+        httr2::req_method("PATCH") |>
+        httr2::req_perform()
+      data <- paste0(httr2::resp_status(resp), ' ',  httr2::resp_status_desc(resp))
+      return(resp)
+    },
+
     #' @description
     #' Remove your cached login credentials to logout of the client
     #' @examples
-    #' client$remove_credentials()
+    #' try(
+    #'    client$remove_credentials()
+    #' )
     remove_credentials = function() {
       if (file.exists(private$credentials_file)) {
         file.remove(private$credentials_file)
@@ -85,12 +153,7 @@ Client <- R6::R6Class("Client",  # nolint
     credentials_file = NULL,
     credentials = NULL,
     json2tbl = function(data) {
-      data <- lapply(data, function(data) {
-        data[sapply(data, is.null)] <- NA  # nolint
-        unlist(data)
-      })
-      data <- bind_rows(data)
-      return(data)
+      json2tbl_impl(data)
     },
     querystring2df = function(querystring) {
       tryCatch({

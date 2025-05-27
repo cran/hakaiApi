@@ -7,15 +7,26 @@
 Class to use to make authenticated API requests for Hakai data
 }
 \examples{
+\dontrun{
 # Initialize a new client
-client <- Client$new()
+try(
+  client <- Client$new()
+)
+
 # Follow authorization prompts to log in
 
 # Retrieve some data. See <https://hakaiinstitute.github.io/hakai-api/> for options.
-url <- paste0(client$api_root, "/aco/views/projects?project_year=2020&fields=project_name")
-projects_2020 <- client$get(url)
+try(
+  url <- paste0(client$api_root, "/aco/views/projects?project_year=2020&fields=project_name")
+)
 
-print(projects_2020)
+try(
+  projects_2020 <- client$get(url)
+)
+
+try(
+  print(projects_2020)
+)
 # # A tibble: 20 x 1
 #    project_name
 #    <chr>
@@ -24,24 +35,29 @@ print(projects_2020)
 #  3 Fraser River - Chimney Creek West William Canyon
 #  4 Cruickshank WS
 #  ...
+}
 
 ## ------------------------------------------------
 ## Method `Client$new`
 ## ------------------------------------------------
 
-client <- Client$new()
+try(
+   client <- Client$new()
+)
 
 ## ------------------------------------------------
 ## Method `Client$get`
 ## ------------------------------------------------
 
-client$get("https://hecate.hakai.org/api/aco/views/projects")
+try(client$get("https://hecate.hakai.org/api/aco/views/projects"))
 
 ## ------------------------------------------------
 ## Method `Client$remove_credentials`
 ## ------------------------------------------------
 
-client$remove_credentials()
+try(
+   client$remove_credentials()
+)
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -53,15 +69,18 @@ client$remove_credentials()
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Client$new()}}
-\item \href{#method-get}{\code{Client$get()}}
-\item \href{#method-remove_credentials}{\code{Client$remove_credentials()}}
-\item \href{#method-clone}{\code{Client$clone()}}
+\item \href{#method-Client-new}{\code{Client$new()}}
+\item \href{#method-Client-get}{\code{Client$get()}}
+\item \href{#method-Client-post}{\code{Client$post()}}
+\item \href{#method-Client-put}{\code{Client$put()}}
+\item \href{#method-Client-patch}{\code{Client$patch()}}
+\item \href{#method-Client-remove_credentials}{\code{Client$remove_credentials()}}
+\item \href{#method-Client-clone}{\code{Client$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Client-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Client-new}{}}}
 \subsection{Method \code{new()}}{
 Log into Google to gain credential access to the API
 \subsection{Usage}{
@@ -87,7 +106,9 @@ A client instance
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{client <- Client$new()
+\preformatted{try(
+   client <- Client$new()
+)
 }
 \if{html}{\out{</div>}}
 
@@ -95,18 +116,20 @@ A client instance
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get"></a>}}
-\if{latex}{\out{\hypertarget{method-get}{}}}
+\if{html}{\out{<a id="method-Client-get"></a>}}
+\if{latex}{\out{\hypertarget{method-Client-get}{}}}
 \subsection{Method \code{get()}}{
 Send a GET request to the API
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Client$get(endpoint_url)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Client$get(endpoint_url, col_types = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{endpoint_url}}{The full API url to fetch data from}
+
+\item{\code{col_types}}{a readr type specification}
 }
 \if{html}{\out{</div>}}
 }
@@ -115,7 +138,7 @@ A dataframe of the requested data
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{client$get("https://hecate.hakai.org/api/aco/views/projects")
+\preformatted{try(client$get("https://hecate.hakai.org/api/aco/views/projects"))
 }
 \if{html}{\out{</div>}}
 
@@ -123,8 +146,74 @@ A dataframe of the requested data
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-remove_credentials"></a>}}
-\if{latex}{\out{\hypertarget{method-remove_credentials}{}}}
+\if{html}{\out{<a id="method-Client-post"></a>}}
+\if{latex}{\out{\hypertarget{method-Client-post}{}}}
+\subsection{Method \code{post()}}{
+Send a POST request to the API
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Client$post(endpoint_url, rec_data)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{endpoint_url}}{The full API url to fetch data from}
+
+\item{\code{rec_data}}{dataframe, list, or other R data structure to send as part of the post request payload}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+post request response status code and description
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Client-put"></a>}}
+\if{latex}{\out{\hypertarget{method-Client-put}{}}}
+\subsection{Method \code{put()}}{
+Send a PUT request to the API
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Client$put(endpoint_url, rec_data)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{endpoint_url}}{The full API url to fetch data from}
+
+\item{\code{rec_data}}{dataframe, list, or other R data structure to send as part of the post request payload}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+PUT request response status code and description
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Client-patch"></a>}}
+\if{latex}{\out{\hypertarget{method-Client-patch}{}}}
+\subsection{Method \code{patch()}}{
+Send a PATCH request to the API
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Client$patch(endpoint_url, rec_data)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{endpoint_url}}{The full API url to fetch data from}
+
+\item{\code{rec_data}}{dataframe, list, or other R data structure to send as part of the post request payload}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+PATCH request response status code and description
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Client-remove_credentials"></a>}}
+\if{latex}{\out{\hypertarget{method-Client-remove_credentials}{}}}
 \subsection{Method \code{remove_credentials()}}{
 Remove your cached login credentials to logout of the client
 \subsection{Usage}{
@@ -133,7 +222,9 @@ Remove your cached login credentials to logout of the client
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{client$remove_credentials()
+\preformatted{try(
+   client$remove_credentials()
+)
 }
 \if{html}{\out{</div>}}
 
@@ -141,8 +232,8 @@ Remove your cached login credentials to logout of the client
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Client-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Client-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

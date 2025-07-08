@@ -1,6 +1,6 @@
 Package: hakaiApi
 Title: Authenticated HTTP Request Client for the 'Hakai' API
-Version: 1.0.3
+Version: 1.0.4
 Authors@R: c(
     person("Sam", "Albers", , "sam.albers@hakai.org", role = c("aut", "cre")),
     person("Taylor", "Denouden", , "taylor.denouden@hakai.org", role = "aut"),
@@ -25,7 +25,7 @@ Language: en-CA
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2025-05-27 15:13:14 UTC; sam.albers
+Packaged: 2025-07-08 21:14:24 UTC; sam.albers
 Author: Sam Albers [aut, cre],
   Taylor Denouden [aut],
   Brett Johnson [aut],
@@ -34,4 +34,4 @@ Author: Sam Albers [aut, cre],
   Hakai Institute [cph]
 Maintainer: Sam Albers <sam.albers@hakai.org>
 Repository: CRAN
-Date/Publication: 2025-05-27 23:10:05 UTC
+Date/Publication: 2025-07-08 21:30:01 UTC

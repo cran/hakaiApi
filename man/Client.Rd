@@ -4,7 +4,9 @@
 \alias{Client}
 \title{The Hakai API Client Class}
 \description{
-Class to use to make authenticated API requests for Hakai data
+Class to use to make authenticated API requests for Hakai data.
+Credentials can be provided via the HAKAI_API_TOKEN environment variable
+or through a credentials file.
 }
 \examples{
 \dontrun{
@@ -13,15 +15,17 @@ try(
   client <- Client$new()
 )
 
+# Or use environment variable for token
+Sys.setenv(HAKAI_API_TOKEN = "token_type=Bearer&access_token=TOKEN")
+try(
+  client <- Client$new()
+)
+
 # Follow authorization prompts to log in
 
 # Retrieve some data. See <https://hakaiinstitute.github.io/hakai-api/> for options.
 try(
-  url <- paste0(client$api_root, "/aco/views/projects?project_year=2020&fields=project_name")
-)
-
-try(
-  projects_2020 <- client$get(url)
+  projects_2020 <- client$get("/aco/views/projects?project_year=2020&fields=project_name")
 )
 
 try(
@@ -44,11 +48,21 @@ try(
 try(
    client <- Client$new()
 )
+# Using environment variable
+Sys.setenv(HAKAI_API_TOKEN = "token_type=Bearer&access_token=TOKEN")
+try(
+   client <- Client$new()
+)
+# Using custom credentials file
+try(
+   client <- Client$new(credentials_file = "/path/to/creds")
+)
 
 ## ------------------------------------------------
 ## Method `Client$get`
 ## ------------------------------------------------
 
+try(client$get("/aco/views/projects"))
 try(client$get("https://hecate.hakai.org/api/aco/views/projects"))
 
 ## ------------------------------------------------
@@ -86,7 +100,8 @@ Log into Google to gain credential access to the API
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Client$new(
   api_root = "https://hecate.hakai.org/api",
-  login_page = "https://hecate.hakai.org/api-client-login"
+  login_page = "https://hecate.hakai.org/api-client-login",
+  credentials_file = "~/.hakai-api-auth-r"
 )}\if{html}{\out{</div>}}
 }
 
@@ -98,9 +113,19 @@ Defaults to "https://hecate.hakai.org/api"}
 
 \item{\code{login_page}}{Optional API login page url to display to user.
 Defaults to "https://hecate.hakai.org/api-client-login"}
+
+\item{\code{credentials_file}}{Optional path to the credentials cache file.
+Defaults to "~/.hakai-api-auth-r"}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Credentials can be provided in two ways:
+1. Via the HAKAI_API_TOKEN environment variable (contains query string: "token_type=Bearer&access_token=...")
+2. Via a credentials file (default: ~/.hakai-api-auth-r)
+The environment variable takes precedence if both are available.
+}
+
 \subsection{Returns}{
 A client instance
 }
@@ -108,6 +133,15 @@ A client instance
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{try(
    client <- Client$new()
+)
+# Using environment variable
+Sys.setenv(HAKAI_API_TOKEN = "token_type=Bearer&access_token=TOKEN")
+try(
+   client <- Client$new()
+)
+# Using custom credentials file
+try(
+   client <- Client$new(credentials_file = "/path/to/creds")
 )
 }
 \if{html}{\out{</div>}}
@@ -127,7 +161,7 @@ Send a GET request to the API
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{endpoint_url}}{The full API url to fetch data from}
+\item{\code{endpoint_url}}{The API endpoint url - can be a full URL or a relative path that will be appended to the api_root}
 
 \item{\code{col_types}}{a readr type specification}
 }
@@ -138,7 +172,8 @@ A dataframe of the requested data
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{try(client$get("https://hecate.hakai.org/api/aco/views/projects"))
+\preformatted{try(client$get("/aco/views/projects"))
+try(client$get("https://hecate.hakai.org/api/aco/views/projects"))
 }
 \if{html}{\out{</div>}}
 
@@ -157,7 +192,7 @@ Send a POST request to the API
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{endpoint_url}}{The full API url to fetch data from}
+\item{\code{endpoint_url}}{The API endpoint url - can be a full URL or a relative path that will be appended to the api_root}
 
 \item{\code{rec_data}}{dataframe, list, or other R data structure to send as part of the post request payload}
 }
@@ -179,7 +214,7 @@ Send a PUT request to the API
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{endpoint_url}}{The full API url to fetch data from}
+\item{\code{endpoint_url}}{The API endpoint url - can be a full URL or a relative path that will be appended to the api_root}
 
 \item{\code{rec_data}}{dataframe, list, or other R data structure to send as part of the post request payload}
 }
@@ -201,7 +236,7 @@ Send a PATCH request to the API
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{endpoint_url}}{The full API url to fetch data from}
+\item{\code{endpoint_url}}{The API endpoint url - can be a full URL or a relative path that will be appended to the api_root}
 
 \item{\code{rec_data}}{dataframe, list, or other R data structure to send as part of the post request payload}
 }
